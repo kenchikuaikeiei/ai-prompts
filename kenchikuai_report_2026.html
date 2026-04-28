@@ -1,0 +1,788 @@
+<\!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>建築AI経営実態調査 2026｜調査レポート</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+:root {
+  --c1:#00BCD4; --c2:#9C27B0; --c3:#E91E63;
+  --dark:#1a1a2e; --gray:#64748b;
+  --border:#e2e8f0; --bg:#f8f9fc;
+  --page-bg:#F3F3F3;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans JP',sans-serif;background:#374151;color:var(--dark);
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+/* PAGE */
+.page{width:1060px;min-height:720px;margin:24px auto;background:#fff;
+  box-shadow:0 8px 32px rgba(0,0,0,.25);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;}
+
+/* PAGE HEADER */
+.ph{display:flex;align-items:center;padding:14px 40px;
+  border-bottom:1px solid var(--border);gap:14px;flex-shrink:0;}
+.ph-num{width:32px;height:32px;background:linear-gradient(135deg,var(--c1),var(--c2));
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:14px;flex-shrink:0;}
+.ph-title{font-size:20px;font-weight:900;color:var(--dark);}
+.ph-sub{font-size:12px;color:var(--gray);margin-top:1px;}
+
+/* BODY */
+.pb{flex:1;padding:20px 40px 16px;display:flex;flex-direction:column;gap:14px;}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+
+/* CARD */
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:18px 20px;display:flex;flex-direction:column;}
+.ctitle{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:14px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.qbadge{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;
+  font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap;}
+.chart-box{flex:1;position:relative;min-height:0;}
+
+/* KPI */
+.kpi-row{display:flex;gap:16px;}
+.kpi{flex:1;background:var(--dark);border-radius:12px;padding:20px;text-align:center;
+  position:relative;overflow:hidden;}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));}
+.kpi-n{font-size:42px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.kpi-u{font-size:18px;font-weight:700;}
+.kpi-l{color:rgba(255,255,255,.6);font-size:12px;margin-top:6px;line-height:1.4;}
+
+/* INSIGHT */
+.ins{background:linear-gradient(135deg,rgba(0,188,212,.07),rgba(156,39,176,.07));
+  border:1px solid rgba(0,188,212,.25);border-left:4px solid var(--c1);
+  border-radius:10px;padding:12px 16px;font-size:13px;line-height:1.6;
+  color:var(--dark);flex-shrink:0;}
+.ins strong{color:var(--c2);}
+.ins-label{font-size:10px;font-weight:700;color:var(--c1);letter-spacing:.1em;margin-bottom:4px;}
+.ins-r{border-left-color:var(--c3);border-color:rgba(233,30,99,.2);
+  background:linear-gradient(135deg,rgba(233,30,99,.06),rgba(156,39,176,.06));}
+.ins-r .ins-label{color:var(--c3);}
+
+/* LEVEL BARS */
+.lvl-list{display:flex;flex-direction:column;gap:14px;}
+.lvl-item{display:flex;align-items:center;gap:12px;}
+.lvl-badge{width:64px;padding:4px 0;text-align:center;border-radius:6px;
+  font-size:11px;font-weight:700;flex-shrink:0;}
+.l1-b{background:rgba(100,116,139,.15);color:#64748b;}
+.l2-b{background:rgba(59,130,246,.15);color:#3b82f6;}
+.l3-b{background:rgba(0,188,212,.15);color:var(--c1);}
+.l4-b{background:linear-gradient(135deg,rgba(0,188,212,.15),rgba(156,39,176,.15));color:var(--c2);}
+.lvl-desc{font-size:12px;color:var(--gray);flex:1;line-height:1.4;}
+.lvl-track{flex:2;height:14px;background:#f1f5f9;border-radius:8px;overflow:hidden;}
+.lvl-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;}
+.l1-f{background:linear-gradient(90deg,#94a3b8,#cbd5e1);}
+.l2-f{background:linear-gradient(90deg,#60a5fa,#93c5fd);}
+.l3-f{background:linear-gradient(90deg,var(--c1),#26C6DA);}
+.l4-f{background:linear-gradient(90deg,var(--c1),var(--c2));}
+.lvl-fill span{color:#fff;font-size:11px;font-weight:700;}
+.lvl-pct{font-size:22px;font-weight:900;min-width:70px;text-align:right;color:var(--dark);}
+
+/* FINDING CARDS */
+.finding{background:var(--dark);border-radius:12px;padding:20px;}
+.finding-n{font-size:36px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.finding-l{color:rgba(255,255,255,.7);font-size:12px;margin-top:6px;line-height:1.5;}
+
+/* TABLES */
+.tt{width:100%;border-collapse:collapse;font-size:13px;}
+.tt th{background:var(--dark);color:#fff;padding:9px 12px;text-align:left;
+  font-size:11px;font-weight:700;letter-spacing:.05em;}
+.tt th:not(:first-child){text-align:center;}
+.tt td{padding:8px 12px;border-bottom:1px solid var(--border);}
+.tt td:not(:first-child){text-align:center;}
+.tt tr:last-child td{border-bottom:none;}
+.tt tr:nth-child(even) td{background:var(--bg);}
+.pb-h{font-weight:700;}
+.pb-badge{display:inline-block;padding:2px 10px;border-radius:20px;
+  font-weight:700;font-size:12px;min-width:58px;}
+.pb-hi{background:rgba(0,188,212,.15);color:#0097a7;}
+.pb-md{background:rgba(59,130,246,.12);color:#2563eb;}
+.pb-lo{background:rgba(100,116,139,.12);color:#64748b;}
+
+.st{width:100%;border-collapse:collapse;font-size:12px;}
+.st th{background:var(--dark);color:#fff;padding:8px 10px;text-align:left;
+  font-size:11px;font-weight:700;letter-spacing:.05em;}
+.st td{padding:7px 10px;border-bottom:1px solid var(--border);line-height:1.4;}
+.st tr:last-child td{border-bottom:none;}
+.st tr:nth-child(even) td{background:var(--bg);}
+
+/* QUOTES */
+.qc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.qc{background:var(--bg);border-left:3px solid var(--c1);border-radius:8px;
+  padding:12px 14px;font-size:13px;color:var(--dark);line-height:1.6;font-style:italic;}
+.qc:nth-child(even){border-left-color:var(--c2);}
+
+/* HIGHLIGHT BOX */
+.hl-box{background:linear-gradient(135deg,rgba(233,30,99,.06),rgba(156,39,176,.1));
+  border:1px solid rgba(233,30,99,.25);border-radius:10px;padding:14px 20px;
+  text-align:center;color:var(--c3);}
+.hl-num{font-size:30px;font-weight:900;display:block;line-height:1.1;}
+.hl-txt{font-size:13px;font-weight:700;display:block;margin-top:4px;line-height:1.5;}
+.hl-sub{font-size:11px;font-weight:400;color:var(--gray);display:block;margin-top:4px;}
+
+/* EXEC FINDING (light bg version) */
+.exec-finding{display:flex;gap:16px;align-items:flex-start;
+  background:#fff;border:1px solid var(--border);border-left:4px solid transparent;
+  border-image:linear-gradient(180deg,var(--c1),var(--c2)) 1;
+  border-radius:0 10px 10px 0;padding:15px 18px;}
+.ef-num{width:30px;height:30px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--c1),var(--c2));border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:13px;margin-top:2px;}
+.ef-text{font-size:16px;color:var(--dark);line-height:1.65;}
+.ef-text strong{color:var(--c2);font-size:17px;}
+
+/* COVER */
+.cover-shell{background:var(--page-bg);flex:1;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding:40px 80px;
+  text-align:center;position:relative;overflow:hidden;}
+.cover-shell::before{content:'';position:absolute;top:-120px;left:-120px;
+  width:350px;height:350px;
+  background:radial-gradient(circle,rgba(0,188,212,.08) 0%,transparent 70%);
+  border-radius:50%;}
+.cover-shell::after{content:'';position:absolute;bottom:-80px;right:-80px;
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(156,39,176,.08) 0%,transparent 70%);
+  border-radius:50%;}
+.cover-badge{display:inline-block;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
+  color:#fff;font-size:12px;font-weight:700;letter-spacing:.15em;
+  padding:6px 22px;border-radius:20px;margin-bottom:24px;}
+.cover-h1{font-size:36px;font-weight:900;color:var(--dark);line-height:1.35;margin-bottom:12px;}
+.cover-h1 span{background:linear-gradient(135deg,var(--c1),var(--c2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.cover-sub{font-size:16px;color:var(--gray);margin-bottom:36px;font-weight:400;}
+.cover-kpis{display:flex;gap:44px;justify-content:center;}
+.ck-num{font-size:52px;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--c1),var(--c2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ck-lbl{color:var(--gray);font-size:12px;margin-top:6px;}
+.cover-meta{margin-top:36px;color:#9ca3af;font-size:11px;}
+.cover-divider{width:60px;height:3px;border-radius:2px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));margin:0 auto 28px;}
+
+/* EXEC bg */
+.exec-shell{background:var(--page-bg);flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.exec-hdr{padding:22px 44px 16px;border-bottom:1px solid rgba(0,0,0,.08);
+  display:flex;align-items:center;}
+.exec-body{flex:1;padding:20px 44px;display:flex;flex-direction:column;gap:12px;}
+
+/* PAGE FOOTER */
+.pfoot{padding:8px 40px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.pfoot-brand{font-size:11px;color:var(--gray);font-weight:500;}
+.pfoot-pn{font-size:11px;color:var(--gray);}
+
+/* PRINT */
+@media print{
+  body{background:#fff;}
+  .page{width:100%;height:100vh;margin:0;box-shadow:none;
+    page-break-after:always;break-after:page;}
+  .page:last-child{page-break-after:auto;break-after:auto;}
+}
+@page{size:A4 landscape;margin:0;}
+</style>
+</head>
+<body>
+
+<\!-- PAGE 1: COVER -->
+<div class="page">
+  <div class="cover-shell">
+    <div id="cover-logo-slot" style="margin-bottom:20px;"></div>
+    <div class="cover-badge">建築AI経営研究会｜2026年3月実施</div>
+    <h1 class="cover-h1">建築AI経営実態調査 2026<br><span>〜経営者から見た「AI戦略化」の実態〜</span></h1>
+    <div class="cover-divider"></div>
+    <p class="cover-sub">建築・建設業界の経営者53名を対象に実施した<br>AI活用に関する意識・実態調査の結果報告です。</p>
+    <div class="cover-kpis">
+      <div><div class="ck-num">53</div><div class="ck-lbl">有効回答数</div></div>
+      <div><div class="ck-num">7</div><div class="ck-lbl">対象業種</div></div>
+      <div><div class="ck-num">20</div><div class="ck-lbl">調査設問数</div></div>
+      <div><div class="ck-num">2026</div><div class="ck-lbl">実施年</div></div>
+    </div>
+    <div class="cover-meta">調査期間：2026年3月｜調査主体：建築AI経営研究会｜対象：建築・建設業経営者</div>
+  </div>
+  <div class="pfoot" style="background:var(--page-bg);border-top-color:rgba(0,0,0,.1);">
+    <span class="pfoot-brand" id="cover-foot-brand">建築AI経営研究会</span>
+    <span class="pfoot-pn">1 / 12</span>
+  </div>
+</div>
+
+<\!-- PAGE 2: EXECUTIVE SUMMARY -->
+<div class="page">
+  <div class="exec-shell">
+    <div class="exec-hdr">
+      <div>
+        <div style="font-size:21px;font-weight:900;color:var(--dark);">
+          エグゼクティブサマリー
+          <span style="background:linear-gradient(135deg,var(--c1),var(--c2));
+            -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+            — 調査の5大発見
+          </span>
+        </div>
+        <div style="font-size:12px;color:var(--gray);margin-top:3px;">n=53 / 建築・建設業経営者 / 2026年3月</div>
+      </div>
+      <div id="exec-logo-slot" style="margin-left:auto;padding-left:20px;"></div>
+    </div>
+    <div class="exec-body">
+      <div class="exec-finding">
+        <div class="ef-num">1</div>
+        <div class="ef-text"><strong>回答者の90.6%が全社的なAI活用に至っていません。</strong>AI活用レベルがLevel 1（個人的利用のみ）の経営者は56.6%を占めており、Level 2を合わせると90.6%が全社展開に届いていない状況です。</div>
+      </div>
+      <div class="exec-finding">
+        <div class="ef-num">2</div>
+        <div class="ef-text"><strong>AIを経営に活かすうえでの最大の壁は「優先順位・何から始めるかが見えない」でした。</strong>51%（27名）が同項目を選択しており、技術的な障壁よりも判断・実行面の課題が上位に挙げられています。</div>
+      </div>
+      <div class="exec-finding">
+        <div class="ef-num">3</div>
+        <div class="ef-text"><strong>AI活用の効果を定量的に把握できている経営者は18.9%にとどまります。</strong>「効果が出ていないので把握できていない」「感覚で判断している」という回答が合計81%を占めており、経営数字との接続が課題として残っています。</div>
+      </div>
+      <div class="exec-finding">
+        <div class="ef-num">4</div>
+        <div class="ef-text"><strong>56.6%（30名）が「武器になると確信しているが、まだ使いこなせていない」と回答しています。</strong>AIへの期待は高い一方で、実践への移行が課題となっている状況が確認されました。</div>
+      </div>
+      <div class="exec-finding">
+        <div class="ef-num">5</div>
+        <div class="ef-text"><strong>今一番必要なものとして、45%（24名）が「自社に合ったAI導入の成功事例・ロードマップ」を選択しました。</strong>汎用的な情報よりも、自社の状況に合わせた具体的な実践手順へのニーズが高いことが示されています。</div>
+      </div>
+    </div>
+    <div class="pfoot" style="background:var(--page-bg);border-top-color:rgba(0,0,0,.1);">
+      <span class="pfoot-brand" id="exec-foot-brand">建築AI経営研究会</span>
+      <span class="pfoot-pn">2 / 12</span>
+    </div>
+  </div>
+</div>
+
+<\!-- PAGE 3: RESPONDENT PROFILE -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">3</div>
+    <div><div class="ph-title">回答者属性</div><div class="ph-sub">Respondent Profile — Q5・Q6</div></div>
+  </div>
+  <div class="pb">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-n">53<span class="kpi-u">名</span></div><div class="kpi-l">有効回答数<br>建築・建設業経営者</div></div>
+      <div class="kpi"><div class="kpi-n">83<span class="kpi-u">%</span></div><div class="kpi-l">29名以下の<br>中小企業経営者</div></div>
+      <div class="kpi"><div class="kpi-n">53<span class="kpi-u">%</span></div><div class="kpi-l">業種別最多<br>工務店</div></div>
+      <div class="kpi"><div class="kpi-n">7</div><div class="kpi-l">対象業種数<br>（工務店〜不動産）</div></div>
+    </div>
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q5</span>従業員規模の分布</div>
+        <div class="chart-box"><canvas id="c-size"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q6</span>業種の分布</div>
+        <div class="chart-box"><canvas id="c-ind"></canvas></div>
+      </div>
+    </div>
+    <div class="ins">
+      <div class="ins-label">📋 DATA NOTE</div>
+      回答者の<strong>45.3%（24名）が2〜9名規模</strong>、37.7%（20名）が10〜29名規模の経営者です。工務店が52.8%（28名）で最多となり、リフォーム（17%）、その他（15%）が続きました。建築・建設業界の中小企業経営者を中心としたデータです。
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p3-brand">建築AI経営研究会</span><span class="pfoot-pn">3 / 12</span></div>
+</div>
+
+<\!-- PAGE 4: AI LEVEL -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">4</div>
+    <div><div class="ph-title">AI活用レベルの現状</div><div class="ph-sub">Current State of AI Adoption — Q7</div></div>
+  </div>
+  <div class="pb">
+    <div class="g3">
+      <div class="finding"><div class="finding-n">90.6%</div><div class="finding-l">Level 1+2の合計<br>全社展開に至っていない経営者（48名）</div></div>
+      <div class="finding"><div class="finding-n">56.6%</div><div class="finding-l">Level 1（最多回答）<br>個人的利用のみ・会社方針なし（30名）</div></div>
+      <div class="finding"><div class="finding-n">9.4%</div><div class="finding-l">Level 3以上（先進層）<br>全社展開〜独自AI構築（5名）</div></div>
+    </div>
+    <div class="card" style="flex:1;">
+      <div class="ctitle"><span class="qbadge">Q7</span>現在の貴社の「AI活用レベル」はどれに最も近いですか？（n=53）</div>
+      <div class="lvl-list" style="flex:1;justify-content:center;">
+        <div class="lvl-item">
+          <div class="lvl-badge l1-b">Level 1</div>
+          <div class="lvl-desc">個人的に使っている状態。会社としての方針も把握もない。</div>
+          <div class="lvl-track"><div class="lvl-fill l1-f" style="width:56.6%;"><span>30名</span></div></div>
+          <div class="lvl-pct">56.6%</div>
+        </div>
+        <div class="lvl-item">
+          <div class="lvl-badge l2-b">Level 2</div>
+          <div class="lvl-desc">特定部署で利用している状態。全社にはまだ広がっていない。</div>
+          <div class="lvl-track"><div class="lvl-fill l2-f" style="width:34%;"><span>18名</span></div></div>
+          <div class="lvl-pct">34.0%</div>
+        </div>
+        <div class="lvl-item">
+          <div class="lvl-badge l3-b">Level 3</div>
+          <div class="lvl-desc">会社として使うルールができ、全社で標準的に活用している。</div>
+          <div class="lvl-track"><div class="lvl-fill l3-f" style="width:5.7%;"><span></span></div></div>
+          <div class="lvl-pct">5.7%</div>
+        </div>
+        <div class="lvl-item">
+          <div class="lvl-badge l4-b">Level 4</div>
+          <div class="lvl-desc">自社の独自データをAIに学習させ、企業独自のAIを構築できている。</div>
+          <div class="lvl-track"><div class="lvl-fill l4-f" style="width:3.8%;"><span></span></div></div>
+          <div class="lvl-pct">3.8%</div>
+        </div>
+      </div>
+    </div>
+    <div class="ins ins-r">
+      <div class="ins-label">📊 KEY DATA</div>
+      Level 1+2の合計は<strong>90.6%（48名）</strong>となっており、全社的なAI活用に至っている企業は少数にとどまっています。Level 3以上（全社標準化・独自AI構築）はわずか<strong>9.4%（5名）</strong>でした。
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p4-brand">建築AI経営研究会</span><span class="pfoot-pn">4 / 12</span></div>
+</div>
+
+<\!-- PAGE 5: CROSS TAB -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">5</div>
+    <div><div class="ph-title">従業員規模別 AI活用レベル（クロス集計）</div><div class="ph-sub">AI Level × Company Size Cross-Analysis</div></div>
+  </div>
+  <div class="pb">
+    <div class="card" style="flex:1;">
+      <div class="ctitle"><span class="qbadge">Q5×Q7</span>従業員規模別のAI活用レベル分布（各規模内の人数）</div>
+      <div class="chart-box"><canvas id="c-cross"></canvas></div>
+    </div>
+    <div class="g2">
+      <div class="ins">
+        <div class="ins-label">📋 DATA NOTE — 小規模企業</div>
+        <strong>個人事業主（4名）は全員Level 1</strong>となっています。2〜9名規模でも54%がLevel 1にとどまっており、小規模企業における組織的な展開の難しさがうかがえます。
+      </div>
+      <div class="ins ins-r">
+        <div class="ins-label">📊 KEY DATA — 規模と活用度</div>
+        <strong>30〜99名規模でもLevel 1が80%</strong>を占めています。従業員規模が大きくなっても、自動的にAI活用が全社展開に進むわけではないことが示されています。
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p5-brand">建築AI経営研究会</span><span class="pfoot-pn">5 / 12</span></div>
+</div>
+
+<\!-- PAGE 6: AI TOOLS -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">6</div>
+    <div><div class="ph-title">AIツール導入・利用状況</div><div class="ph-sub">AI Tool Adoption — Q8（会社として）vs Q9（経営者個人として）</div></div>
+  </div>
+  <div class="pb">
+    <div class="card" style="flex:1;">
+      <div class="ctitle"><span class="qbadge">Q8・Q9</span>各AIツールの「会社導入率」vs「経営者個人利用率」（%、未導入・未利用以外を集計）</div>
+      <div class="chart-box"><canvas id="c-tools"></canvas></div>
+    </div>
+    <div class="card">
+      <table class="tt">
+        <thead><tr><th>AIツール</th><th>会社導入率</th><th>個人利用率</th><th>会社有料率</th><th>個人有料率</th></tr></thead>
+        <tbody>
+          <tr><td class="pb-h">ChatGPT</td><td><span class="pb-badge pb-hi">81.1%（43名）</span></td><td><span class="pb-badge pb-hi">88.7%（47名）</span></td><td>52.8%（28名）</td><td>58.5%（31名）</td></tr>
+          <tr><td class="pb-h">Gemini</td><td><span class="pb-badge pb-hi">77.4%（41名）</span></td><td><span class="pb-badge pb-hi">79.2%（42名）</span></td><td>56.6%（30名）</td><td>50.9%（27名）</td></tr>
+          <tr><td class="pb-h">CANVA</td><td><span class="pb-badge pb-md">54.7%（29名）</span></td><td><span class="pb-badge pb-md">50.9%（27名）</span></td><td>37.7%（20名）</td><td>24.5%（13名）</td></tr>
+          <tr><td class="pb-h">議事録AI</td><td><span class="pb-badge pb-md">47.2%（25名）</span></td><td><span class="pb-badge pb-md">50.9%（27名）</span></td><td>37.7%（20名）</td><td>37.7%（20名）</td></tr>
+          <tr><td class="pb-h">業務自動化ツール</td><td><span class="pb-badge pb-lo">15.1%（8名）</span></td><td><span class="pb-badge pb-lo">15.1%（8名）</span></td><td>3.8%（2名）</td><td>7.5%（4名）</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="ins">
+      <div class="ins-label">📋 DATA NOTE</div>
+      ChatGPT・Geminiは8〜9割が利用するツールとなっています。一方、<strong>業務自動化ツール（Dify・n8n等）の導入率は15.1%</strong>にとどまっており、高度な自動化活用はまだ限定的な状況です。
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p6-brand">建築AI経営研究会</span><span class="pfoot-pn">6 / 12</span></div>
+</div>
+
+<\!-- PAGE 7: TOOL SELECTION + MGMT DECISION -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">7</div>
+    <div><div class="ph-title">ツール選定基準 ＆ 経営判断への活用</div><div class="ph-sub">Tool Selection Criteria & AI in Management Decision-Making — Q10・Q12</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q10</span>AIツールを選ぶ際、最も重視することは？</div>
+        <div class="chart-box"><canvas id="c-toolsel"></canvas></div>
+        <div class="ins" style="margin-top:10px;">
+          <div class="ins-label">📋 DATA NOTE</div>
+          <strong>「建築・建設業務への特化度」が26.4%（14名）で最多</strong>となりました。「特に基準なく試している」が17%（9名）と2位となっており、選定基準が定まっていない経営者も一定数いることが確認されています。
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q12</span>AIを「経営判断」に使っていますか？（延べ回答）</div>
+        <div class="chart-box"><canvas id="c-mgmt"></canvas></div>
+        <div class="ins ins-r" style="margin-top:10px;">
+          <div class="ins-label">📊 KEY DATA</div>
+          <strong>37.7%（20名）が「まだ経営判断には使えていない」</strong>と回答しています。活用している場合は②市場動向・競合分析（21名）と④新規事業アイデア出し（19名）が多い結果でした。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p7-brand">建築AI経営研究会</span><span class="pfoot-pn">7 / 12</span></div>
+</div>
+
+<\!-- PAGE 8: EFFECT + BARRIER -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">8</div>
+    <div><div class="ph-title">AI効果の把握方法 ＆ 経営活用の最大の壁</div><div class="ph-sub">Measuring AI Effectiveness & Top Barriers — Q14・Q11</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q14</span>AI活用の効果を、どのように把握していますか？</div>
+        <div class="chart-box"><canvas id="c-eff"></canvas></div>
+        <div class="hl-box" style="margin-top:10px;">
+          <span class="hl-num">18.9%</span>
+          <span class="hl-txt">のみが定量的な効果把握を実施しています。</span>
+          <span class="hl-sub">残り81%は「感覚のみ」または「把握できていない」と回答しました。</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q11</span>AIを経営に活かすうえで、今一番の壁は？</div>
+        <div class="chart-box"><canvas id="c-wall"></canvas></div>
+        <div class="ins ins-r" style="margin-top:10px;">
+          <div class="ins-label">📊 KEY DATA</div>
+          <strong>「優先順位・何から始めるかが見えない」が51%（27名）</strong>で最多の回答となりました。セキュリティや人材不足といった要因よりも、実行の優先順位づけに課題を感じている経営者が多い状況です。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p8-brand">建築AI経営研究会</span><span class="pfoot-pn">8 / 12</span></div>
+</div>
+
+<\!-- PAGE 9: INVESTMENT + SUPPORT -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">9</div>
+    <div><div class="ph-title">AI投資の障壁 ＆ 社員への支援状況</div><div class="ph-sub">Investment Barriers & Employee Support — Q15・Q13</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q15</span>AI活用への投資を増やすうえでの最大の障壁は？</div>
+        <div class="chart-box"><canvas id="c-inv"></canvas></div>
+        <div class="ins" style="margin-top:10px;">
+          <div class="ins-label">📋 DATA NOTE</div>
+          <strong>「何に投資すべきか判断できない」が42%（22名）で最多</strong>でした。一方、「すでに増やすと決断している」も34%（18名）あり、投資姿勢に差があることが確認されています。
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q13</span>社員のAI活用を、会社としてどう支援していますか？</div>
+        <div class="chart-box"><canvas id="c-sup"></canvas></div>
+        <div class="ins" style="margin-top:10px;">
+          <div class="ins-label">📋 DATA NOTE</div>
+          「費用全額負担・全社員」は24.5%（13名）、「特に何もしていない（個人任せ）」は22.6%（12名）となり、<strong>支援体制に差が生じている</strong>状況が確認されています。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p9-brand">建築AI経営研究会</span><span class="pfoot-pn">9 / 12</span></div>
+</div>
+
+<\!-- PAGE 10: TALENT + NEED -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">10</div>
+    <div><div class="ph-title">AI人材育成の優先度 ＆ 今一番必要なもの</div><div class="ph-sub">AI Talent Priority & What's Needed Most — Q16・Q17</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q16</span>AI人材の確保・育成を、経営の優先課題にしていますか？</div>
+        <div class="chart-box"><canvas id="c-tal"></canvas></div>
+        <div class="ins ins-r" style="margin-top:10px;">
+          <div class="ins-label">📊 KEY DATA</div>
+          <strong>「重要だが何も手を打てていない」が52.8%（28名）</strong>で過半数を占めました。重要性の認識はあるものの、具体的な取り組みに移行できていない経営者が多い状況です。
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q17</span>AIを経営に活かすために、今一番必要なものは？</div>
+        <div class="chart-box"><canvas id="c-need"></canvas></div>
+        <div class="ins" style="margin-top:10px;">
+          <div class="ins-label">📋 DATA NOTE</div>
+          <strong>「自社に合った成功事例・ロードマップ」が45.3%（24名）</strong>で最多となりました。汎用的なAI情報より、自社の実情に合わせた具体的な導入手順へのニーズが高い結果でした。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p10-brand">建築AI経営研究会</span><span class="pfoot-pn">10 / 12</span></div>
+</div>
+
+<\!-- PAGE 11: COMPETITOR + MINDSET -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">11</div>
+    <div><div class="ph-title">競合意識 ＆ 経営者のAIマインドセット</div><div class="ph-sub">Competitive Awareness & Executive AI Mindset — Q18・Q19</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;">
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q18</span>同業他社のAI活用状況について、どう感じていますか？</div>
+        <div class="chart-box"><canvas id="c-comp"></canvas></div>
+        <div class="ins" style="margin-top:10px;">
+          <div class="ins-label">📋 DATA NOTE</div>
+          「他社の状況がまったく見えない」と「危機感がある」の合計は<strong>52.8%（28名）</strong>となっています。同業他社の動向を把握できていない経営者が多い状況が示されています。
+        </div>
+      </div>
+      <div class="card">
+        <div class="ctitle"><span class="qbadge">Q19</span>率直に聞きます。あなたにとってAIは今、何ですか？</div>
+        <div class="chart-box"><canvas id="c-mind"></canvas></div>
+        <div class="hl-box" style="margin-top:10px;">
+          <span class="hl-num">56.6%（30名）</span>
+          <span class="hl-txt">「武器になると確信しているが使いこなせていない」</span>
+          <span class="hl-sub">Q19 最多回答（n=53）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p11-brand">建築AI経営研究会</span><span class="pfoot-pn">11 / 12</span></div>
+</div>
+
+<\!-- PAGE 12: SUMMARY + QUOTES -->
+<div class="page">
+  <div class="ph">
+    <div class="ph-num">12</div>
+    <div><div class="ph-title">全設問サマリー ＆ 経営者の声（自由回答）</div><div class="ph-sub">Complete Data Summary & Free Responses — Q5〜Q20</div></div>
+  </div>
+  <div class="pb">
+    <div class="g2" style="flex:1;align-items:start;">
+      <div class="card" style="flex:none;">
+        <div class="ctitle">📊 全設問 主要回答サマリー</div>
+        <table class="st">
+          <thead><tr><th style="width:8%">設問</th><th style="width:28%">テーマ</th><th style="width:42%">最多回答（TOP1）</th><th style="width:22%">件数・比率</th></tr></thead>
+          <tbody>
+            <tr><td>Q5</td><td>従業員規模</td><td>2〜9名</td><td><span class="pb-badge pb-hi">24名 45.3%</span></td></tr>
+            <tr><td>Q6</td><td>業種</td><td>工務店</td><td><span class="pb-badge pb-hi">28名 52.8%</span></td></tr>
+            <tr><td>Q7</td><td>AI活用レベル</td><td>Level 1（個人的利用のみ）</td><td><span class="pb-badge pb-hi">30名 56.6%</span></td></tr>
+            <tr><td>Q8</td><td>会社導入ツール</td><td>ChatGPT（有料+公認）</td><td><span class="pb-badge pb-hi">43名 81.1%</span></td></tr>
+            <tr><td>Q9</td><td>個人利用ツール</td><td>ChatGPT（有料+無料）</td><td><span class="pb-badge pb-hi">47名 88.7%</span></td></tr>
+            <tr><td>Q10</td><td>ツール選定基準</td><td>建築・建設業務への特化度</td><td><span class="pb-badge pb-md">14名 26.4%</span></td></tr>
+            <tr><td>Q11</td><td>経営活用の壁</td><td>優先順位・何から始めるかが見えない</td><td><span class="pb-badge pb-hi">27名 50.9%</span></td></tr>
+            <tr><td>Q12</td><td>経営判断での活用</td><td>まだ使えていない</td><td><span class="pb-badge pb-md">20名 37.7%</span></td></tr>
+            <tr><td>Q13</td><td>社員支援方法</td><td>費用一部負担・希望者のみ</td><td><span class="pb-badge pb-md">16名 30.2%</span></td></tr>
+            <tr><td>Q14</td><td>効果把握方法</td><td>把握できていない</td><td><span class="pb-badge pb-hi">25名 47.2%</span></td></tr>
+            <tr><td>Q15</td><td>投資障壁</td><td>何に投資すべきか判断できない</td><td><span class="pb-badge pb-md">22名 41.5%</span></td></tr>
+            <tr><td>Q16</td><td>AI人材育成</td><td>重要だが何も手を打てていない</td><td><span class="pb-badge pb-hi">28名 52.8%</span></td></tr>
+            <tr><td>Q17</td><td>今一番必要なもの</td><td>自社に合った成功事例・ロードマップ</td><td><span class="pb-badge pb-hi">24名 45.3%</span></td></tr>
+            <tr><td>Q18</td><td>競合への意識</td><td>自社と同程度だと思う</td><td><span class="pb-badge pb-md">17名 32.1%</span></td></tr>
+            <tr><td>Q19</td><td>AIの位置づけ</td><td>武器になると確信・使いこなせていない</td><td><span class="pb-badge pb-hi">30名 56.6%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="ctitle" style="padding-bottom:8px;border-bottom:1px solid var(--border);">
+          <span class="qbadge">Q20</span>AIについて、今感じていることを一言（自由回答抜粋）
+        </div>
+        <div class="qc-grid" style="flex:1;">
+          <div class="qc">最高のパートナーにしたい</div>
+          <div class="qc">情報の更新が早すぎて困ってます</div>
+          <div class="qc">自分が率先して活用する必要がある</div>
+          <div class="qc">スピードについていけるのか…</div>
+          <div class="qc">AIの種類が多くて自社に何が合うのか分からない</div>
+          <div class="qc">早めに習得して時代に遅れないようにしたい</div>
+          <div class="qc">全社員に浸透させます</div>
+          <div class="qc">少人数が適正人数になり得ると感じました</div>
+          <div class="qc">取り組まないといけない</div>
+          <div class="qc">セキュリティの知識も必要と感じた</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray);margin-top:4px;padding-top:8px;border-top:1px solid var(--border);">
+          ※本資料の転載・引用の際は「建築AI経営研究会 調査（2026年3月）」と出典を明記してください。
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pfoot"><span class="pfoot-brand" id="p12-brand">建築AI経営研究会</span><span class="pfoot-pn">12 / 12</span></div>
+</div>
+
+<script>
+Chart.register(ChartDataLabels);
+const C1='#00BCD4',C2='#9C27B0',C3='#E91E63',DARK='#1a1a2e';
+const COLS=[C1,C2,C3,'#FF9800','#4CAF50','#3F51B5','#009688','#FF5722'];
+const BF={family:"'Noto Sans JP',sans-serif"};
+function pct(n,t=53){return(n/t*100).toFixed(1)+'%';}
+function hbarOpts(mx,unit='名',yWidth=220){
+  return{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      tooltip:{callbacks:{label:c=>' '+c.raw+unit+' ('+pct(c.raw)+')'}},
+      datalabels:{anchor:'end',align:'end',color:DARK,
+        font:{...BF,weight:'bold',size:12},
+        formatter:v=>v+unit+' ('+pct(v)+')'}},
+    layout:{padding:{right:110}},
+    scales:{
+      x:{max:mx,ticks:{font:BF,callback:v=>v+unit},grid:{color:'#f0f0f5'}},
+      y:{
+        afterFit(scale){scale.width=yWidth;},
+        ticks:{font:{...BF,size:11},color:DARK}}}};
+}
+// Q5 size
+new Chart(document.getElementById('c-size'),{type:'doughnut',
+  data:{labels:['2〜9名（24名）','10〜29名（20名）','30〜99名（5名）','1名・個人事業主（4名）'],
+    datasets:[{data:[24,20,5,4],backgroundColor:[C1,C2,C3,'#FF9800'],borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{...BF,size:11},padding:10,boxWidth:12}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:13},
+        formatter:(v)=>{const p=(v/53*100).toFixed(0);return p<7?'':v+'名\n'+p+'%';}}}}});
+// Q6 industry
+new Chart(document.getElementById('c-ind'),{type:'doughnut',
+  data:{labels:['工務店（28名）','リフォーム（9名）','その他（8名）','設計事務所（3名）','内装工事（2名）','設備工事（2名）','不動産（1名）'],
+    datasets:[{data:[28,9,8,3,2,2,1],backgroundColor:COLS,borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{...BF,size:11},padding:6,boxWidth:12}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:12},
+        formatter:(v)=>{const p=(v/53*100).toFixed(0);return p<6?'':v+'名\n'+p+'%';}}}}});
+// Q7 cross
+new Chart(document.getElementById('c-cross'),{type:'bar',
+  data:{labels:['1名（個人事業主）\n n=4','2〜9名\n n=24','10〜29名\n n=20','30〜99名\n n=5'],
+    datasets:[
+      {label:'Level 1',data:[4,13,9,4],backgroundColor:'#94a3b8'},
+      {label:'Level 2',data:[0,9,8,1],backgroundColor:'#60a5fa'},
+      {label:'Level 3',data:[0,1,2,0],backgroundColor:C1},
+      {label:'Level 4',data:[0,1,1,0],backgroundColor:C2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{font:{...BF,size:12},padding:16,boxWidth:14}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:12},formatter:v=>v>0?v+'名':''}},
+    scales:{x:{stacked:true,ticks:{font:{...BF,size:12}}},
+      y:{stacked:true,ticks:{font:BF,stepSize:1},title:{display:true,text:'人数（名）',font:BF}}}}});
+// Q8/Q9 tools
+new Chart(document.getElementById('c-tools'),{type:'bar',
+  data:{labels:['ChatGPT','Gemini','CANVA','議事録AI','Claude','Perplexity','Copilot','業務自動化'],
+    datasets:[
+      {label:'会社として導入（%）',data:[81.1,77.4,54.7,47.2,30.2,22.6,17.0,15.1],backgroundColor:C1+'bb',borderColor:C1,borderWidth:2},
+      {label:'経営者個人として利用（%）',data:[88.7,79.2,50.9,50.9,34.0,18.9,17.0,15.1],backgroundColor:C2+'bb',borderColor:C2,borderWidth:2}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'top',labels:{font:{...BF,size:13},padding:16,boxWidth:14}},
+      datalabels:{anchor:'end',align:'top',color:DARK,font:{...BF,weight:'bold',size:11},formatter:v=>v+'%'}},
+    layout:{padding:{top:20}},
+    scales:{x:{ticks:{font:{...BF,size:12}}},
+      y:{max:105,ticks:{font:BF,callback:v=>v+'%'},title:{display:true,text:'導入・利用率（%）',font:BF}}}}});
+// Q10 tool selection
+new Chart(document.getElementById('c-toolsel'),{type:'bar',
+  data:{labels:['建築・建設業務への特化度','特に基準なく試している','価格・コストパフォーマンス','知名度・使っている人が多い','社内システムとの連携性','口コミ・紹介','セキュリティ・情報管理'],
+    datasets:[{data:[14,9,9,7,7,5,2],backgroundColor:COLS.map(c=>c+'cc'),borderColor:COLS,borderWidth:2}]},
+  options:hbarOpts(18)});
+// Q12 management
+new Chart(document.getElementById('c-mgmt'),{type:'bar',
+  data:{labels:['②市場動向・競合分析','④新規事業のアイデア出し','③採用・人事・組織づくり','①資金繰り・財務分析','経営判断にはまだ使えていない'],
+    datasets:[{data:[21,19,15,11,21],
+      backgroundColor:[C1+'cc',C2+'cc',C3+'cc','#FF9800cc','#94a3b8cc'],
+      borderColor:[C1,C2,C3,'#FF9800','#94a3b8'],borderWidth:2}]},
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},
+      datalabels:{anchor:'end',align:'end',color:DARK,font:{...BF,weight:'bold',size:12},formatter:v=>v+'名（延べ）'}},
+    layout:{padding:{right:110}},
+    scales:{x:{max:26,ticks:{font:BF,callback:v=>v+'名'}},y:{ticks:{font:{...BF,size:12}}}}}});
+// Q14 effect
+new Chart(document.getElementById('c-eff'),{type:'bar',
+  data:{labels:['効果が出ておらず把握できていない','感覚のみで判断（数字なし）','業務数字で把握（時間・工数）','経営数字で把握（売上・利益）'],
+    datasets:[{data:[25,18,8,2],backgroundColor:['#94a3b8cc','#60a5facc',C1+'cc',C2+'cc'],borderColor:['#94a3b8','#60a5fa',C1,C2],borderWidth:2}]},
+  options:hbarOpts(30)});
+// Q11 wall
+new Chart(document.getElementById('c-wall'),{type:'bar',
+  data:{labels:['何から始めるか優先順位が見えない','特に壁は感じていない','業績・利益への直結感がない','現場や社員がついてこない','投資対効果を社内説明できない','AI人材がいない・育っていない','セキュリティが怖くて踏み切れない'],
+    datasets:[{data:[27,6,5,5,4,4,2],
+      backgroundColor:[C3+'cc','#4CAF50cc','#60a5facc','#FF9800cc',C2+'cc',C1+'cc','#94a3b8cc'],
+      borderColor:[C3,'#4CAF50','#60a5fa','#FF9800',C2,C1,'#94a3b8'],borderWidth:2}]},
+  options:hbarOpts(32)});
+// Q15 investment
+new Chart(document.getElementById('c-inv'),{type:'bar',
+  data:{labels:['何に投資すべきか判断できない','すでに増やすと決断している','相談できる専門家がいない','効果が見えず社内承認が取れない','予算がない・優先度が低い'],
+    datasets:[{data:[22,18,6,5,2],backgroundColor:[C3+'cc',C2+'cc','#60a5facc','#FF9800cc','#94a3b8cc'],borderColor:[C3,C2,'#60a5fa','#FF9800','#94a3b8'],borderWidth:2}]},
+  options:hbarOpts(26)});
+// Q13 support
+new Chart(document.getElementById('c-sup'),{type:'doughnut',
+  data:{labels:['費用一部負担・希望者のみ（16名）','費用全額負担・全社員（13名）','個人任せ・何もしていない（12名）','費用負担なし・推奨のみ（7名）','個人事業主のため該当なし（5名）'],
+    datasets:[{data:[16,13,12,7,5],backgroundColor:[C1,C2,'#94a3b8','#60a5fa','#FF9800'],borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{...BF,size:11},padding:8,boxWidth:12}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:12},formatter:(v)=>{const p=(v/53*100).toFixed(0);return p<8?'':v+'名\n'+p+'%';}}}}});
+// Q16 talent
+new Chart(document.getElementById('c-tal'),{type:'doughnut',
+  data:{labels:['重要だが何も手を打てていない（28名）','社内教育・研修に投資（13名）','個人事業主のため該当なし（6名）','優先度は高くない（4名）','採用・人事評価に組み込んでいる（2名）'],
+    datasets:[{data:[28,13,6,4,2],backgroundColor:['#94a3b8',C2,'#FF9800','#60a5fa',C1],borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{...BF,size:11},padding:8,boxWidth:12}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:12},formatter:(v)=>{const p=(v/53*100).toFixed(0);return p<8?'':v+'名\n'+p+'%';}}}}});
+// Q17 need
+new Chart(document.getElementById('c-need'),{type:'bar',
+  data:{labels:['自社に合った成功事例・ロードマップ','AIを学べる実践的な場（本人・社員）','AI導入を伴走支援する専門家','同業経営者と情報交換できる場','時間がない（忙しくて未検討）','資金・補助金などの投資環境'],
+    datasets:[{data:[24,13,7,4,4,1],backgroundColor:[C3+'cc',C2+'cc',C1+'cc','#FF9800cc','#60a5facc','#94a3b8cc'],borderColor:[C3,C2,C1,'#FF9800','#60a5fa','#94a3b8'],borderWidth:2}]},
+  options:hbarOpts(28)});
+// Q18 competitor
+new Chart(document.getElementById('c-comp'),{type:'doughnut',
+  data:{labels:['自社と同程度（17名）','他社の状況が見えない（14名）','他社が進んでいて危機感がある（14名）','自社のほうが進んでいる（8名）'],
+    datasets:[{data:[17,14,14,8],backgroundColor:['#60a5fa','#94a3b8',C3,C2],borderWidth:3,borderColor:'#fff'}]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{...BF,size:12},padding:10,boxWidth:14}},
+      datalabels:{color:'#fff',font:{...BF,weight:'bold',size:13},formatter:(v)=>v+'名\n'+(v/53*100).toFixed(0)+'%'}}}});
+// Q19 mindset
+new Chart(document.getElementById('c-mind'),{type:'bar',
+  data:{labels:['「武器」と確信・使いこなせていない','「道具」と確信・使いこなせていない','すでに業績を変えている「武器」','「焦り」で動いている','有効性は認めるが自分ごとになれない','コスト削減の「道具」になっている','まだ懐疑的'],
+    datasets:[{data:[30,8,5,4,3,2,1],backgroundColor:[C2+'cc',C1+'cc','#4CAF50cc',C3+'cc','#FF9800cc','#60a5facc','#94a3b8cc'],borderColor:[C2,C1,'#4CAF50',C3,'#FF9800','#60a5fa','#94a3b8'],borderWidth:2}]},
+  options:hbarOpts(35,'名',230)});
+</script>
+
+<script>
+// ---- LOGO INJECTION ----
+const LOGO_COVER = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGsAAABGCAYAAADLjWrkAAAcq0lEQVR42u18e3xV5ZX2s9733ftccic3IIZACoRrAaFaKzZBa6t1bAEnqa236tSq46Vfx/nq1E7ncMbW6c3W6rSdWq1j1WqT0V6sdgRazkG8VREMJFzCLUBISCCQ28nZZ+/3XfPHPgciAgbbDzLfL4vf/pFz2WfvfZ53rfWsZ619gFEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEbtVEboUb/m861llnMiMWOe87NXTVcXwtDRPx+D8ARFjHExIler1lWo/+Szx8GFnwcbPj/3+XHTCPECWR6EwAoEomIDAARQAx9fMz/Ir1lLPNY0Mj/7pkIQGvP7vwntx3+VGEod3oqlWKwEQzFMAJMWrf3Db7+b3MmrKaCgsNgJpyCB0QiERGNRs2fvr/6/GxRPNXr97SBJzLftGTBbiBJXKJXfOTzH2ljMBHen4cREZjfveuaNWtyFi5c2DfkuuWuXbusSZMmJTPPqZEOVh0gGDB/+2br/13t4KucOAAmG8wC7AGkFcAApVysaHljx6OrNp6/a9myzmgkQohGzbAOEqsRQNRs/FXvLePNmKsGvB4oEpDMkCAIoxFUAp0FOz4GoK0BDQKAPlEou+iihZX79nQucDyvr6KiYt/ZVVXtza3bJggh87e1bP962djx/1xYUHA4e8yYjkcffbRr6dKlU67//DXPzpkz58qWlpbgvHnzumbOmHZX0nECEyaU3JtImAIiV494sBqINJjtlu7E0i7H03BTGrAEjAA0AZ70wXLZuKqo8tUu50sPRaNfRWSVAoYJVtp0Lw30en3eACc8xayUYQgfLCMoKLIKc8VJPRSgKMDG0FmG+aOe616+b+++xy67+OInXnv7rS8mnVSwt7f/nJzs3qvaO9undnbtXw7gW80bG3/qprTXPdi9Yt7cua8b7S1IJp2UVGqD51qNkz9w1krPdSFGMlC19fUSAL79xroF7catIs8RJMkGSUVEigB/Y1I2k0oM9puNh5w6Zs5HtEbzKeYvzQ5Lm5QSpKSAkoKVEqwsIZUhrbraOgZOtn8UMABo1aqXVu9qbb0tFApuKS0a89x/PPzwdZ0HDrUOJlPtRNSXTKXaDh/q6XZT/DeXXXrp3YDY+fobb1xQVVW14hePP/55IrxYNnbcjZ/73OKbKyoqXrn1ttvuXvf224tHNFgN6biysbv3i4dJgaXQR6I9H82/zALQUsCk0DqoK7+3/K0PAsR1DQ3Dur5oPGYggaKJBRO154GgidjPTAZ+HBYsIJQ9HPAlAJxVVnb3YDK5t+6qqzZNnTq1o6K8zCsbN86zLIXS4uJ+27J1KBwcPGfBgrcHk8m+aVVVv9u5c/tZF9bUfG1Cefkm1+gfrX2z6YcgeejB++9/zPM8GrFgMTOhrk4b5sLN/X2fdp0BEKTwUz77MLIApQElZgQgTa+2+M8d5ipmFp1NTcPyrFrMJDCgXS/l0xl/IyafhrEBWACeNRwWqO+9995CEN8iScy49xv3/KF58+atK/8U8+IvxVPJpCP3d3ROzisogGWpn0fuuef53Xv2/B9lyZcTicSLP3zwwXsaGzcWgNGtPX3grLPGPeZ4rgcge8SClfGKu19bd/ZOFvnQZHxWIXCUiIkjbuYDBpkaTNHOjv4lwKGceDTqDScUzqguJhigtzNxQAoBZt9viRmC059NGlDusNbZ9u3b+ZJPfPw733vo+58SUomxY8eGc8LhroKCwm5lKUcL7NTGi5WPLWu97rrr5p4994P3B2z7Qsu2l9wTXfYbIenvSscV3rxtx7Y1rTtbb2Sj1aLqC24XIzkEMrN4ff/eqw4ZwZDCsOATVvRMBE0gS3tm/6Ao+vxP1y/wQX/vvByNxwwUUFpZMMXzPBARDT2AvzY0AO89gQIgHn744UOx+OpzvvvP3/qYkqIzLy+vNTc3F7m5ucQA7+/cf7Cjrb2v81Cnk5ub21c6btzW8z6y8I6rr7nyVjsY9IqLS7pyswoqduxoferlV1+70rYCf0wmnbPVSA2BRKTR3Z3X6qQuMymXCCT98oQBliBIGG2MYCnYEGAAcgHBbAZZqsMD5nZmXk11De/JCCPVNSIaj5qunT0t+bJooXHT7sg+UJIBYjncSoeIiGfPnrGy62DXv+cV5H/75Zfin3RdN8fqPRy0QyE75TpznUEnAcL8w4e713fu76pJJFov3Lp1S8pSakzL5i0Vbzc2/mrW7Jlvzpo1s0MKgmekGJGeVROLSQC4e9vOy7vsrCIwa0AQ8dGlbiShqihPCDAI7P8jAzBLN5lEa6/+2MGDe0vRUKfTasEJrTnexRBA9phQIbQBiEgYwDI+UGmuOBzPQiQSYQDc2Nj0XwP9AwWJ/oGKjy+66FefuPTcb9RcuPC+kuLi9okTKu91Xb3s6muviz755FOPffd73/tcZVnZP2jX29xz+LA3vqK8PZyV9arROicrK3vtpMrJd33600vqRqRnxbu6WBHh9f37P9PnCgAKDAKxAIHAkMhm172xIut33+jsW9zDJH3eBhAT2SR0t5cV/kr9ro8z86N1DQ108pDbxCDACsggG0ZGBxI8lM4wAsnUe6kWFI1GsXjx4sJJFeX/NXZs6XcNU17T1i1PplxvbW5O1uFpVVV2YmDw1tLSYndj43q+8YYbdt96yy0zDZsPuym3+aKLL7586/atDyYG++MXnPPhla+te/Mbmzc3L27dtWPTiPOsSCQiUFenW/btm9jaLy/ixCATWAAMJgZABiRQEZCdd557VjSf3C1ChCAgjDACxIBigKFo235nqSDihob3DoPQQGfroZ1KSpBh9qk7wxAAZhNSNqpqplQAQHF1MZ3g3AmA6e7unFpSUtyysXnzVzY2Nd00sbL8+lA4/JYB0LJt269379lT1NHePr6jo6N0//79ydzc3IMzZs76wvadO2956KGHDhB4R152buLHjzyybd26xiunTq28UUmxecR5VqymRmDZMv63FbFL9iuE4LDHIP88yYCZjLJsMc6Szysas6HmF/HfdCas6SbhGAlOLz4tjNuDAceq/uWvW8o/u2TKnoz+d9ICSUHBBQgE31M1CALCwJefAoHwSYlK+vNXr37lVQCvZhz0xRdXNQFoOt4+TZu2+H/8+c+ZGs3E/rT6a0SESAQiGmV67rkXmwA0jTjPisdixiLidd29n+nXCRBpOlIBswJYiSJiLBqX/bQGcMn0CSsK4JEHfSR/EQQJAy+JYPbTr7RcDgAx1LzntWrPeEdJHYGMhNAMoRlgQEszXPkqo7ozAB2JRER1dbVKM5R3bLW1tbK6ulql86r2+RWTMQbRqL9iMvuPKM+KMIsokXl+W+uCz69968NwXAaEzHQOCMRMlpgUEF13nz/37a8B+McFE197eu3ulv1KThGuNoKFYAhIJuEkHU6NCd3GzE8Q0MfLmI7Xj2ou8QlGXmFuIXcyBBMkG0gYDK0WLC2HTWiHCr1pjzsu0A3pGB2Px4/d/1iPNSPKs2Ixv/H31J7dS3rsUBBM+mi6JzDD2AGFmVlZ/w2gd0ak3hZEyRljsp7NDobBBoYMgRlgNoI4hUMHaPrX73l5HANYdoJma0NDE0MAuYWh8Vp7IGISzCA+uoPitI50Bm3EgMXMFF+0SDNzwZa+ns8N9PdBCOXrSfC/OBBRIRv9ocLshxoA/tLllcwArqsseL6EPe1qkn5tZMD+l63dlMVbtw3UEhFH36PHpV3XkcRDFrZPWAQDyhCE/IvgGk6hJo8XKjPl+YgBK73q+fvr1k3Y5rgTYTxmaIEj6h8MlCUqQrT7zvNmrakj0jfNn+8hEhEXza98JeT2xOxQkMDQxAJSE5QWQhPoEPOVnNw2pZu35/oL450eFqmuEfCAQ9sPbQuSDTKUlpu0T98NwPQXfVs0pFA7WRmRec+xG48osKLpWuj1PV1Xd5NgkNBHZT0Cs2SpFJcFxeMDrofqSESBiKtRI4hIlwblz0JkwD4YABsIA2FMir2UnPzc8z0XFiAc8L92fndRLIH80uxS1h4ITL5yIY/22d//JAQxM+bNmXV9YX7uVVJKPg5gpJRC1eTKmy1J/2or9TUAX5ZSRkMB618rKkonjiSwCLW1hpnDG5O9SzxHE0GlFXaC30LXooiTqBkXfJIBlMycyQBQg5gBgHsvm7a6GJ7DTBIwDAaYDJi1tgLZgft/0lJGNK6zujomjyUZM+DnrHCuXciGAaJ0UcwQQyQnaU7totIMj3/wg2+OTQwmH8nKyXviskWLxh9tG7wjDWDCpIri6TNnlZaUlFxYVDjm+/PmzC6pqppWWl4+xQZGSFu/tr5eNBDpu5a/9MEOUh+Apw2RFHxkXYOhLFEZCDXdNuec1tuZqSHNrqLRqEEkIs77QGV7zbf/uLJLhi4jd9AAWhoysJiE4yZRkJf3d6vq939nUV3pgO9d785fxsA70hrhjOqOI4CdcrSIRgUA/ulPHv0cM54OB7KcTTt33i6E+KoxZuhoAGutsWLFqnsAIKhUddmE8rLGjc23pFKpkUUwGpqamJlpr079Y48BE5iZTXoBMphhAuEgKnKDzxCRUx2LyaEDMdWoEa42GGt5PwtKAcOGAAZDQGghPE9rotzxv1/5VjUAVFcvkydILCTYQGZyFcv3DVQGfyEEDyYGr3dc7/G8vKzHUq57jfAl2Xf56YwZM2wAioQo8jwv6DjOyCIYzJwZbMlZn+i9ULspIpDINAF9MmiJfO2Y88aHfgeA4l1djKPMg+LRmAFAdy+e+0ax1dtvhBFE5E9QMIHA7LHm9rbElQC4pGQmn4gFkGGoDKMkD9IAAp7fgDyVaFFbKwGY2bOnzRVS5nZ0dPzhzfXrY8ZzE+fOn3/xkPcczZ3NzRmCoYmJg8HgyCIYGYX91pUvL9qrw/kwUhsiwpEmNhlIS0zLCrTcMW12Y4jAoSvrdEiAj25RE1LE8yYW7yuz+acBFYZmMsy+Hi8IMpUahC3ylj71ow3lDSdR4kU6BEpm+D0ZhjIEme4aDztaNDRACAFn0L2jt39gl9bO+UR6obLs7r3t7TcSETecVLR893o64zkrHosZZlZL/rDq1gH2iMSxp8kE42FXL40995nY69N/+UdSLhhO2vOMAFyCpYlsVmjr7ldwkgAgBadLahZEYE+7WeHmDR1LmPnBurrjK/GSfWlJZPpYYEgmv87Sp0bV29rasj60YMGlbMyrBXmFtwFAIpHoMGwueuCBBwpvv/32g2mHMUPqLEL60MlkUqX7oDottp15ean1n26u2NLfU6MTmoXKtJAyjQlBgEFr0strFfY8uAQ4EnD9S7A8gFwDy1OwPUbAC8GmJARAfr4hSMMQDHLJQ8eeviukogeMfndck5maCnTkb2V8FqgMY7iBsLq6WsbjcW/ppy9fSjB6IJFY6rouGIBSEsUFBTse+dlPrwLwwDFgpQBAEB1UUjrBUMgbMQpGRl76p5WNH21lZYHYHAGK2T899kfACR6TmzIi5RmlU0Zpx1g6aZSXNAHtGct1jHIHDdykYRYQ2l+kxAZgA2lYGu0w6+wP/+Arq2cAxJEIv+P6FaezZJpRZOg6pR182NEiHmdmFm3t7V/LycttcBxHMHMAzAHP9URWds5/tnfsv4uZVRooUkrh0k9c/K2zz5771Jjiont7+3qnzpk168n5c+c89bGPfXT6GQ+D8UWLTEgIdBlz+6B2IUS6hchDx72P6IIEMIEYDOlr637EggFBgWAoPUHLAMFAGoJIgw0mMBkd4Fx779b9iwE0w18s5mj1CjBSEH5BfaQQzpAMM/xCSwOQ2k19MycnfzkRmYzXAOBQVtaDPYcPt95xxx0yo2owM1q2btm4befuTiXEGs+Yhw8e7M5TSlBxaX7fGQUrEwJ/39Y184aX3pjNjsdCiKHykt+uZ9Jg8ueN2IAZMGmHyDydAQOGwYbBfs4hASGJM97pAQzhOil4wGeZt95HNCXFYFqGZUOXhR86WYDYpPNWJiwPXxskIg3g8baOrncxhg0bNhwC8NiDDz6IoXXWtp27nwAAL92JMQBSnkFbW/eZJRixWEwwwHWNby3tFNoGkWcEK9+r0hAwGHZAKmn5i1ULUEqClAQ0QXgGtgSkFrAFQ7oMIQHlSVjaAGaAKT2qmdaDhacdHdB5s5791oFPAlN/3VDLEg3+AWUGdCIIZt+j2FcyiM3xp9tPbipDDk7Q7/KOI+TSCTz1zBGMeE2NDoB4ek/Xpwc9GyTI95N0ymBjTHFurrgkO+/ptR1da0BamJQ0whGAloDRCLoGwgEEBKTnQXgAaylsCpmQ5Z59kAI3kHGM3wpiX7gSgO5j7t6RvIGZf7uMlvGRitgYWAYwrCHTaq/PCj0odmFgnepleifh5d4JQDkp8mdCXpINRPqB15vP+5ftzXPgugakxJD1Z6BsKnXkzl8smX8dEaVOvdiuty+4Nv9SRmAsaYeZQcIABCY2hlqbk/M2tW0qiCJ6sB7+TL0QAGkGyyP4pfMWg1gA2j59Wulxiq0zAlZDUxMRgGfbti7utpSCqz0eci4MNlYwqMoEniGiVMWjq4Ktu969EqtPdIBdUESLkotvWrmyxw1eI5DyAFYEQBgIZleHOKes8fuJJcx4ZBk1SQBaaP/GFL9/hXeIuAQG5LDjIFVXV6cTXNwXxGpqTCwWFYj7z6QpPmpqakw0GuUTVMR05oviaNQzzOGzGxqu8QY0BElp6OjZMUPksas/MaX8Ny8y0zlocFup7l3fVPyEUk89A0Bhjvzl4GHnGs0kGEcLXUEEkwQ6d/RfQRIPV6cZYYYaUpqyK30MfT8Fx47H497QM0237c0xFP/Ydj4AoL6+3n5r1aqsb/3kJ4fOKFjVq1ap+KJF3g83bTh/r7RKyGiXhJB+Mx6QROwJRZOltf/Ls6oa/4GI65nNqXxZDQ11JhJhsWzZpjcuXbJzi5JZU4SrXWK/QUUgODqpvU6xcEf9jorKv61s9VeKMArMhsgQMckMOwSMH0TlcMIXn3fevIqBPudaz5hDzJxbNCYvMWHipOZ1a9+eZYxhANlE1GsFrND55563+scPPbT2ggsuCEspZXl5+eBjjz58RcvW7TdEIpFPvvDCC6FAIGCklO5pByve1cUKwK82bb+2i6WEZUstrTSrYHgpFyJ/DMYSPwSgvzoSUUTknWrKGj9+rQI+oMuL9y0/3BmsMq4WgOVLSQYQ7CK/L5y97pmW6wEs8wUizqYEkQW2stmGZXwFXmnLDvYbHGhu6wSArngXnwws284NhUto0vaW7XcXl5b+dyiUszVohdoY5nbtebp0bEl8x85dnwyHwxsnVU54c9asac/v29thKctKbXz77TIGm5Sb8u7/wX1v2bbdLki4BIw//WGwrs4IAiaHcj3H9dbpbGgCSzDBFpadX5RTGjB6b21Z2eNExJFIxMTfx2H27XtOE0UP/+j+Pz++nVLn6BxSCq4Ia0LIAbKNMRZ7XFBZKIgI7DLUBI5l5QXKPQeDziHnkD/HoSE8aWTYFnnzS/uwEkAt/DsnjtMSAUDxeHwzM3/hg7NnzVy3fv0Sz/PX2vnnnTd3YGDArHnlta+fNW7co9u273jgX6LfXDd1yuSn+3t6aoyUGydWlLfmZuXc8FZj48uTJlY07mrdfS2ArpKior8/Y+qFABAiIDhky7YUmDkv2/rrrKHM7T5CApYNKAtQNiBtQNiAChOYOS+d0QkEMHM2M4cQBBACEByyDb81IubOnv3Zs+fOeUZKifr0HZznLFhw3+yZ078HAOPHlj4JoJqI8OXbbjvHsiwsXPiR22dMn7ZdKYUVK1bkTayYsHHGjBk2EeGyyy699szdre/fUX/CvkD6TpK/wm9AML0HPThyjAgiInr0PmQadu/imMKWiHTlpPIn+/sH5wftQItUaktZefmPerq7v5F0kq6B+52+3sHvppzUb6+o/ZsXdu1qqzrQefCmwURi9uSqaVcfPHhQXn/99evu+spXflNWNn5MOJzldnR0TDrtYEWYRfOQGwVmFBfTzJoav7dTW4sZsdjRx3+tuu4kz9Ti6KAlABTP8OfYa5prhoDiv04NdSfl7pkR7SuuuHzmS/GXN9jBwJe8pPu2sqxlBWPGvL6vveOzoVAwWFY2rn3bth1lUol9VVVV/wkDL5lMUOPG5gdTqRQmf2BSyzPP/mbhwYMHe37xi58vGBhwcrds2dJ82nNW1Bc1T29dd5qO09zcTADQ3X24rLCoZLutAns+umjW+t/+OqabNm36auXEiVZJSYm7vrHxqwX5ub883NP3yEsvvfzHyy//5CV7Wvu+PGnSpKvBxtq7t63kM3V1ywEk+wYTPRL0qdbW1qQ6zWGPf9vePmnbob7SwYPdgKVQlJVV3OO6ve4AO1p7JGWI/WZVxlwAFlxYyDxvDVoAFBS8o6KN67/P8gCVSO/nAaFBwErXKFb6Y0OwEILfC1PpT1dwEXYtqMxrR6oaD8oDXJHgsef1raVFi7wTlwwNGoCKxdYsn1w5+ZcEN/TjHz/dWzZ+rDbGCG1M5b59+36dSCSQkxVCcmBAAKD8/MJmpQLfDoVUz759+89PpVJ3zZ8794tZeVnqDy+ueOZAz4HJAE6bZ1E6D8kLnvv98q1aTUZKg0hA2Ba0yyCTvqWHVVpFT7dKOP0LP5rBHkNognQFpFYgIyBdhnIZyhWQDmA5BoEUQ7kG4aRBtiMQdBXCLsH2DIIukOsQwh77mwFCnoewZxB2gbCrEdKEkCYEtA+m6znIzwtgb1foQgCruLZeniwkMjP1J3qTBfkFV3xo/ryZO3ftypFSGtu2qiZXTFy3a/dukBBHJoIef/zx3QB2v/DCC4GbvviFJ4qKi+554umnX1dKYeLEivaBQwP9zBw8LWBlRs1+8Ob66i0JPbHLSSZBlgBrYHCAwcofcCADGAVkevsG/mNmwGPAS/9Qicvkz6oKSK044BJsR8ByGFbKwE4BwZRB0jFIOoyAK5CdEgi6BgEXMEmC5xl4KYbWALtMSAnmlAZ7KTIuMbkM6WZ+/crxOCktz7YnAVgV6yx+r1zPQoigUnJKMBzunX/2gp+3te+9HkyDv1++fBMRQXtaaL+PJa5eurR07aampbfc/MW78nLzn9mwofk/amtrZX19PVVOmpgHIP+GG24InxawOov9i3tu9566/vwxKtDbr/COufFMg1BAGAn2R9Z93ckQWLPfHvEEyANgCZDLEB7BNjaUywhIhpIGlgLCJGATIyT8LaAY+QQEiREQQA4BWR4hVzLC2iAkGXmCELYMslJBBAMCQQ8IaQ0FhnQDdo6Vh549/dnDuFwDAOfO/9BLk6ZMbLjvvgc2WpaFcz60YE3IDtxJRBpEKCjI7w8HQy5wKGfL7p31bDgxoaL86jVrXlvNzKKhoYGVUnrGtKnLp0+d+quXX1p9en4OKB7zp2YnBAMNyuJWzxYMOlZBEhDaQAjAwJ93EJmKzFMgQSQFc0l+eExpVqA0ldSAAe8+0LcdKXbJIZJaMByNYBIIeGkx1jWwPSAnBdiege0CIQ+wjUC2Zgpo4oJcyrVTSMkBdkJFgbFex2BHwmNOwcCCgEoRy/GhXDmVXwWAWE3MIH5ysJ793e9WZiQ913V5zcuvVKcbkgAzbrzpli/39/e7RGNSd9555yX333//wJatLZmelgYArTWaN2+9+bnnniru738f3bRRO6W6X5yg9XHc99fWHld8pOHs/P+kxsoMybz/FvM71fbqYexSEzvJa2mtrwnFVFN94vekO6aa3v987vF+/JFP8NpxlZhR+19k/wPLA4EVeMa/hwAAAABJRU5ErkJggg==';
+const LOGO_SM    = 'data:image/png;base64,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';
+const LOGO_MARK  = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAkCAYAAABrLwHZAAACBklEQVR42u2VPWtUYRCFn5l79+5HPgxqZNFKYiCIjYVYSEg0KgYFURAtLS1ttVnXxh9gZy8hbiGaNYIibAQhgaiFJDZCjI2JMRiNxt17933Hxt7c3RSCnnKKh3OGMwz813/9szKTv9PRteeverVtWKWiAM9WV85vibOMCPvGJya17Ygidn16uvil2TyiWxHx8dLS4W9Rrrs92NycCLCaMJoEIe12Q8ws2HX34fxKkOkP29iXIuIvVp8MfBfXR+yt9Zi1mgIsOHemkSsoiGsH5kNgKa6f9M4hqIRtVMLfnJnZcevd4kFMAdWWnA3dqAUAk8ufBxtRRw8OZyLSEmyKGgDLcfN0IgoIHapx+moYgoDZh1xx7PWbZZE+YrOeTH4jtbMLlXsK2LlHb/f/EOsjiU0E1hpJR2pYpbdXABbr7tRGlAXEGSpEWcLWK7Fx3Ic5QLSgkmgcL6RzViop5bK/Wq0W113zEI26l0Kn7o2iO+uXRwdSwYaGhxXghXOD9Uwhh/f1jHnbng8nRCTdOU3Vaijw6WdySbq6g7BrW6ErTppX+ne/BBNJ23wVsRMPnp5dC/yefCabK4b2cXzk6Jhv8TvJJmd/VgDkA8XMQjOTnCpZIJuKWCqplsv+wP3q7RWNjmk9EefNQ4h3Ak42Cfv9OGZnZwsj8+8Xv+Y7dxI3QEOwDHiBWPgFrGPZNDiejJ4AAAAASUVORK5CYII=';
+
+function logoLink(src, w, h, showName) {
+  const nameHtml = showName
+    ? `<div style="line-height:1.35;margin-left:10px;">
+        <div style="font-size:12px;font-weight:800;color:#1a1a2e;font-family:'Noto Sans JP',sans-serif;">建築AI経営研究会</div>
+        <div style="font-size:9px;letter-spacing:.1em;color:#64748b;font-family:'Noto Sans JP',sans-serif;">kenchiku-ai.com</div>
+       </div>` : '';
+  return `<a href="https://kenchiku-ai.com/" target="_blank"
+    style="display:inline-flex;align-items:center;text-decoration:none;flex-shrink:0;">
+    <img src="${src}" width="${w}" height="${h}" style="display:block;">
+    ${nameHtml}
+  </a>`;
+}
+
+// Cover: centred logo above title
+document.getElementById('cover-logo-slot').innerHTML =
+  logoLink(LOGO_COVER, 107, 70, false);
+
+// Exec summary header: logo on right
+document.getElementById('exec-logo-slot').innerHTML =
+  logoLink(LOGO_SM, 67, 44, false);
+
+// All .ph headers: logo on right (replace any ph-tag)
+document.querySelectorAll('.ph').forEach(ph => {
+  const tag = ph.querySelector('.ph-tag');
+  if(tag) tag.remove();
+  const wrap = document.createElement('div');
+  wrap.style.marginLeft = 'auto';
+  wrap.innerHTML = logoLink(LOGO_SM, 67, 44, true);
+  ph.appendChild(wrap);
+});
+
+// All footers: small mark + link
+['cover-foot-brand','exec-foot-brand',
+ 'p3-brand','p4-brand','p5-brand','p6-brand',
+ 'p7-brand','p8-brand','p9-brand','p10-brand','p11-brand','p12-brand']
+.forEach(id => {
+  const el = document.getElementById(id);
+  if(\!el) return;
+  el.innerHTML = `<a href="https://kenchiku-ai.com/" target="_blank"
+    style="display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;">
+    <img src="${LOGO_MARK}" width="19" height="36" style="display:block;">
+    <span>建築AI経営研究会</span>
+  </a>`;
+});
+</script>
+</body>
+</html>
